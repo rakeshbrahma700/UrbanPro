@@ -862,11 +862,12 @@ app.get('*', (req, res, next) => {
   }
 });
 
-const isMainModule = process.argv[1] && (
-  process.argv[1].endsWith('server.ts') ||
-  process.argv[1].endsWith('server.js') ||
-  process.env.NODE_ENV === 'production'
-);
+const isMainModule = (() => {
+  if (typeof process === 'undefined' || !process.argv || !process.argv[1]) return false;
+  const entry = process.argv[1].replace(/\\/g, '/');
+  if (entry.includes('vite')) return false;
+  return entry.endsWith('server.ts') || entry.endsWith('server.js');
+})();
 
 if (isMainModule) {
   const server = app.listen(port, '0.0.0.0', () => {

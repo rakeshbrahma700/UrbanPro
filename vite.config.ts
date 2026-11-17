@@ -2,12 +2,12 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig, type Plugin } from 'vite';
-import app from './server';
 
 function expressApiPlugin(): Plugin {
   return {
     name: 'express-api-plugin',
-    configureServer(server) {
+    async configureServer(server) {
+      const { default: app } = await import('./server');
       server.middlewares.use(app);
     },
   };
