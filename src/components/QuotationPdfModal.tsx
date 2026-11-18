@@ -1437,26 +1437,29 @@ export const QuotationPdfModal: React.FC<QuotationPdfModalProps> = ({
 
                 </div>
 
-                {/* Bottom Prohibited Warning Note */}
-                <div className="p-2 text-[10px] text-[#1e3a8a] leading-tight bg-blue-50 font-medium border-t border-[#1e3a8a]">
-                  <strong>Note:</strong> Please keep your Cash/Jewellery and anyway in your Custody/Lock" Carring Liquor, Gas Cylinder, Acid of any type of Liquids (like Ghee Tin, Oil etc.) is totally prohibited.
-                </div>
+                {/* Unified Bottom Footer Section */}
+                <div className="mt-auto">
+                  {/* Bottom Prohibited Warning Note */}
+                  <div className="p-2 text-[10px] text-[#1e3a8a] leading-tight bg-blue-50 font-medium border-t border-[#1e3a8a]">
+                    <strong>Note:</strong> Please keep your Cash/Jewellery and anyway in your Custody/Lock" Carring Liquor, Gas Cylinder, Acid of any type of Liquids (like Ghee Tin, Oil etc.) is totally prohibited.
+                  </div>
 
-                {/* Office Address & Contact Details Footer */}
-                <div className="bg-slate-50 border-t border-[#1e3a8a] py-1.5 px-2 text-center text-[9px] sm:text-[9.5px] leading-tight text-black font-semibold">
-                  <p>
-                    <strong>Regd. Office:</strong> {companyProfile?.regAddress || companyProfile?.addressLine1 || 'Ward No. 3, Near Old SBI ATM, Dipka, Korba, CG – 495452'}
-                    &nbsp;|&nbsp;
-                    <strong>Main Operational Office:</strong> {companyProfile?.branchAddress || companyProfile?.addressLine2 || 'Plot No. 1491, Hanspal, Balianta Canal Road, Near Lenskart, Bhubaneswar, Odisha – 752101'}
-                  </p>
-                  <p className="mt-0.5">
-                    <strong>Helpline:</strong> 8093017400 &nbsp;|&nbsp; <strong>Email:</strong> {companyProfile?.email || 'urbanpro403@gmail.com'} &nbsp;|&nbsp; <strong>Website:</strong> www.urbanprologistics.com
-                  </p>
-                </div>
+                  {/* Office Address & Contact Details Footer */}
+                  <div className="bg-slate-50 border-t border-[#1e3a8a] py-1.5 px-2 text-center text-[9px] sm:text-[9.5px] leading-tight text-black font-semibold">
+                    <p>
+                      <strong>Regd. Office:</strong> {companyProfile?.regAddress || companyProfile?.addressLine1 || 'Ward No. 3, Near Old SBI ATM, Dipka, Korba, CG – 495452'}
+                      &nbsp;|&nbsp;
+                      <strong>Main Operational Office:</strong> {companyProfile?.branchAddress || companyProfile?.addressLine2 || 'Plot No. 1491, Hanspal, Balianta Canal Road, Near Lenskart, Bhubaneswar, Odisha – 752101'}
+                    </p>
+                    <p className="mt-0.5">
+                      <strong>Helpline:</strong> 8093017400 &nbsp;|&nbsp; <strong>Email:</strong> {companyProfile?.email || 'urbanpro403@gmail.com'} &nbsp;|&nbsp; <strong>Website:</strong> www.urbanprologistics.com
+                    </p>
+                  </div>
 
-                {/* Bottom Customer Care Support Bar */}
-                <div className="bg-[#1e3a8a] text-center font-bold py-1.5 text-[12px] text-white tracking-wide border-t border-[#1e3a8a]">
-                  24x7 Customer Care Support <span className="text-amber-300 font-extrabold ml-1">8093017400</span>
+                  {/* Bottom Customer Care Support Bar */}
+                  <div className="bg-[#1e3a8a] text-center font-bold py-1.5 text-[12px] text-white tracking-wide border-t border-[#1e3a8a]">
+                    24x7 Customer Care Support <span className="text-amber-300 font-extrabold ml-1">8093017400</span>
+                  </div>
                 </div>
               </div>
             )}
@@ -1465,9 +1468,9 @@ export const QuotationPdfModal: React.FC<QuotationPdfModalProps> = ({
             {(activePage === 'both' || activePage === 'page2') && (
               <div
                 id="quotation-page-2"
-                className="bg-white w-[794px] max-w-[794px] shadow-2xl border-2 border-[#1e3a8a] text-[11.5px] text-black font-sans box-border relative mx-auto p-4 flex flex-col justify-between min-h-[1123px] print:border print:border-[#1e3a8a] print:shadow-none print:w-[794px] print:max-w-[794px] print:min-h-[1120px]"
+                className="bg-white w-[794px] max-w-[794px] min-h-[1123px] shadow-2xl border-2 border-[#1e3a8a] text-[11.5px] text-black font-sans box-border relative mx-auto flex flex-col justify-between print:border print:border-[#1e3a8a] print:shadow-none print:w-[794px] print:max-w-[794px] print:min-h-[1120px]"
               >
-                <div>
+                <div className="p-4 sm:p-6">
                   {/* Terms and Conditions List */}
                   <div className="space-y-4 px-3 pt-2 text-black font-medium leading-relaxed text-[11.5px]">
                     <p className="font-bold text-base text-black flex items-center gap-1.5">
@@ -1523,21 +1526,24 @@ export const QuotationPdfModal: React.FC<QuotationPdfModalProps> = ({
                   </div>
                 </div>
 
-                {/* Office Address & Contact Details Footer */}
-                <div className="bg-slate-50 border-t border-[#1e3a8a] py-1.5 px-2 text-center text-[9px] sm:text-[9.5px] leading-tight text-black font-semibold mt-8">
-                  <p>
-                    <strong>Regd. Office:</strong> {companyProfile?.regAddress || companyProfile?.addressLine1 || 'Ward No. 3, Near Old SBI ATM, Dipka, Korba, CG – 495452'}
-                    &nbsp;|&nbsp;
-                    <strong>Main Operational Office:</strong> {companyProfile?.branchAddress || companyProfile?.addressLine2 || 'Plot No. 1491, Hanspal, Balianta Canal Road, Near Lenskart, Bhubaneswar, Odisha – 752101'}
-                  </p>
-                  <p className="mt-0.5">
-                    <strong>Helpline:</strong> 8093017400 &nbsp;|&nbsp; <strong>Email:</strong> {companyProfile?.email || 'urbanpro403@gmail.com'} &nbsp;|&nbsp; <strong>Website:</strong> www.urbanprologistics.com
-                  </p>
-                </div>
+                {/* Unified Bottom Footer Container */}
+                <div className="mt-auto">
+                  {/* Office Address & Contact Details Footer */}
+                  <div className="bg-slate-50 border-t border-[#1e3a8a] py-1.5 px-2 text-center text-[9px] sm:text-[9.5px] leading-tight text-black font-semibold">
+                    <p>
+                      <strong>Regd. Office:</strong> {companyProfile?.regAddress || companyProfile?.addressLine1 || 'Ward No. 3, Near Old SBI ATM, Dipka, Korba, CG – 495452'}
+                      &nbsp;|&nbsp;
+                      <strong>Main Operational Office:</strong> {companyProfile?.branchAddress || companyProfile?.addressLine2 || 'Plot No. 1491, Hanspal, Balianta Canal Road, Near Lenskart, Bhubaneswar, Odisha – 752101'}
+                    </p>
+                    <p className="mt-0.5">
+                      <strong>Helpline:</strong> 8093017400 &nbsp;|&nbsp; <strong>Email:</strong> {companyProfile?.email || 'urbanpro403@gmail.com'} &nbsp;|&nbsp; <strong>Website:</strong> www.urbanprologistics.com
+                    </p>
+                  </div>
 
-                {/* Bottom Customer Care Support Bar */}
-                <div className="bg-[#1e3a8a] text-center font-bold py-1.5 text-[12px] text-white tracking-wide border border-[#1e3a8a]">
-                  24x7 Customer Care Support <span className="text-amber-300 font-extrabold ml-1">8093017400</span>
+                  {/* Bottom Customer Care Support Bar */}
+                  <div className="bg-[#1e3a8a] text-center font-bold py-1.5 text-[12px] text-white tracking-wide border-t border-[#1e3a8a]">
+                    24x7 Customer Care Support <span className="text-amber-300 font-extrabold ml-1">8093017400</span>
+                  </div>
                 </div>
               </div>
             )}
