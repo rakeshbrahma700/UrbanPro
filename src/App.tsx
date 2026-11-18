@@ -739,7 +739,6 @@ export default function App() {
     status: 'Pending'
   };
 
-  const [quotationForm, setQuotationForm] = useState(initialQuotationForm);
   const [quotations, setQuotations] = useState<any[]>(() => {
     try {
       const saved = localStorage.getItem('upl_quotations');
@@ -763,6 +762,29 @@ export default function App() {
 
   const getNextQuotationNumber = (records = quotations) =>
     getNextAvailableDocumentNumber(records, 'quotationNo');
+
+  const getFreshQuotationForm = (existingQuotations = quotations) => ({
+    ...initialQuotationForm,
+    id: `quot-${Date.now()}`,
+    quotationNo: getNextAvailableDocumentNumber(existingQuotations, 'quotationNo'),
+    quotationDate: new Date().toISOString().split('T')[0],
+  });
+
+  const [quotationForm, setQuotationForm] = useState(() => getFreshQuotationForm());
+
+  // Automatically keep Quotation No. (max + 1) and Quotation Date (today) up to date when creating a quotation
+  useEffect(() => {
+    if (!editingQuotationId && adminTab === 'add-quotation' && !quotationForm.partyName && !quotationForm.mobileNo) {
+      const nextNo = getNextQuotationNumber(quotations);
+      if (quotationForm.quotationNo !== nextNo) {
+        setQuotationForm(prev => ({
+          ...prev,
+          quotationNo: nextNo,
+          quotationDate: prev.quotationDate || new Date().toISOString().split('T')[0],
+        }));
+      }
+    }
+  }, [quotations, adminTab, editingQuotationId]);
 
   useEffect(() => {
     try {
@@ -3285,7 +3307,11 @@ export default function App() {
                   <div className="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">QUOTATIONS</div>
                   <div className="space-y-1">
                     <button
-                      onClick={() => setAdminTab('add-quotation')}
+                      onClick={() => {
+                        setEditingQuotationId(null);
+                        setAdminTab('add-quotation');
+                        setQuotationForm(getFreshQuotationForm(quotations));
+                      }}
                       className={`w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-sm transition-colors cursor-pointer ${adminTab === 'add-quotation' ? 'bg-blue-600 text-white font-semibold' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}`}
                     >
                       <PlusCircle className="w-4 h-4 text-amber-400" />
@@ -4575,17 +4601,53 @@ export default function App() {
                       <span className="absolute -top-3.5 left-4 bg-green-400 text-white px-4 py-1 rounded-md text-sm font-medium shadow-sm">Quot. Details</span>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="border border-slate-300 rounded-lg p-2 focus-within:border-green-500 focus-within:ring-1 focus-within:ring-green-500 transition-all bg-white">
-                          <label className="block text-[11px] text-slate-500 font-medium mb-0.5">
-                            Quot No. * <span className="text-emerald-600">(Editable)</span>
-                          </label>
-                          <input
-                            type="text"
-                            inputMode="numeric"
-                            aria-label="Editable quotation number"
-                            value={quotationForm.quotationNo}
-                            onChange={(e) => setQuotationForm(prev => ({ ...prev, quotationNo: e.target.value }))}
-                            className="w-full outline-none text-slate-800 text-sm bg-transparent cursor-text"
-                          />
+                          <div className="flex items-center justify-between mb-0.5">
+                            <label className="block text-[11px] text-slate-500 font-medium">
+                              Quot No. * <span className="text-emerald-600">(Editable)</span>
+                            </label>
+                            {(() => {
+                              const trimmed = String(quotationForm.quotationNo || '').trim().toLowerCase();
+                              if (!trimmed) return null;
+                              const isDup = quotations.some(
+                                q => String(q.id) !== String(editingQuotationId) &&
+                                     String(q.quotationNo || '').trim().toLowerCase() === trimmed
+                              );
+                              if (isDup) {
+                                return (
+                                  <span className="text-[10px] font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full">
+                                    ⚠️ Already Taken
+                                  </span>
+                                );
+                              }
+                              return (
+                                <span className="text-[10px] font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full">
+                                  ✓ Unique Number
+                                </span>
+                              );
+                            })()}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              inputMode="numeric"
+                              aria-label="Editable quotation number"
+                              value={quotationForm.quotationNo}
+                              onChange={(e) => setQuotationForm(prev => ({ ...prev, quotationNo: e.target.value }))}
+                              className="w-full outline-none text-slate-800 text-sm bg-transparent cursor-text font-bold"
+                              placeholder="Quot No."
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const next = getNextQuotationNumber(quotations);
+                                setQuotationForm(prev => ({ ...prev, quotationNo: next }));
+                              }}
+                              className="text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded-md shrink-0 cursor-pointer transition-colors"
+                              title="Auto-generate next unique quotation number"
+                            >
+                              Auto Next
+                            </button>
+                          </div>
                         </div>
                         <div className="border border-slate-300 rounded-lg p-2 focus-within:border-green-500 focus-within:ring-1 focus-within:ring-green-500 transition-all bg-white relative">
                           <label className="block text-[11px] text-slate-500 font-medium mb-0.5">Quotation Date *</label>
