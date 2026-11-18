@@ -2022,10 +2022,11 @@ export default function App() {
     const cleanStr = query.trim().toLowerCase();
     const cleanDigits = query.replace(/\D/g, '');
 
-    // 1. Direct website enquiry lookup by 10-digit phone or name
-    if (cleanDigits.length >= 10 || cleanStr.length >= 3) {
+    // 1. Direct website enquiry lookup by phone or name
+    if (cleanDigits.length >= 8 || cleanStr.length >= 3) {
       const foundEnquiry = quoteRequests.find(r => {
         const rPhone = String(r.phone || '').replace(/\D/g, '');
+        if (cleanDigits.length >= 8 && rPhone.length >= 8 && (rPhone.includes(cleanDigits) || cleanDigits.includes(rPhone))) return true;
         if (cleanDigits.length >= 10 && rPhone.length >= 10 && rPhone.slice(-10) === cleanDigits.slice(-10)) return true;
         if (cleanStr.length >= 3 && r.name && r.name.trim().toLowerCase().includes(cleanStr)) return true;
         return false;
@@ -2087,7 +2088,11 @@ export default function App() {
       // 2. Exact or clean Party Name match
       if (c.partyName && c.partyName.trim().toLowerCase() === cleanStr) return true;
 
-      // 3. Exact mobile number match, including numbers stored with a country code.
+      // 3. Exact or partial mobile number match, including numbers stored with a country code.
+      if (cleanDigits.length >= 8) {
+        const cPhone = String(c.mobileNo || '').replace(/\D/g, '');
+        if (cPhone.length >= 8 && (cPhone.includes(cleanDigits) || cleanDigits.includes(cPhone))) return true;
+      }
       if (cleanDigits.length >= 10 && findCustomerProfileByMobile([c], query)) return true;
 
       // 4. Starts-with match on party name
@@ -2122,12 +2127,31 @@ export default function App() {
   const handleSurveyPartyNameChange = (val: string) => {
     setSurveyForm(prev => {
       const match = findCustomerProfile(val);
-      if (match && (match.mobileNo || match.email)) {
+      if (match) {
+        setShareToast(`✓ Auto-filled survey details for ${match.partyName || val}`);
+        setTimeout(() => setShareToast(null), 3000);
         return {
           ...prev,
           partyName: val,
-          mobileNo: prev.mobileNo ? prev.mobileNo : (match.mobileNo || ''),
-          email: prev.email ? prev.email : (match.email || ''),
+          mobileNo: match.mobileNo || prev.mobileNo,
+          email: match.email || prev.email,
+          fromCountry: match.fromCountry || prev.fromCountry,
+          fromState: match.fromState || prev.fromState,
+          fromCity: match.fromCity || prev.fromCity,
+          fromArea: match.fromArea || prev.fromArea,
+          fromPinCode: match.fromPinCode || match.fromPincode || prev.fromPinCode,
+          fromFloor: match.fromFloor || prev.fromFloor,
+          fromLift: match.fromLift || prev.fromLift,
+          toCountry: match.toCountry || prev.toCountry,
+          toState: match.toState || prev.toState,
+          toCity: match.toCity || prev.toCity,
+          toArea: match.toArea || prev.toArea,
+          toPinCode: match.toPinCode || match.toPincode || prev.toPinCode,
+          toFloor: match.toFloor || prev.toFloor,
+          toLift: match.toLift || prev.toLift,
+          packingDate: match.packingDate || prev.packingDate,
+          dateOfDelivery: match.deliveryDate || prev.dateOfDelivery,
+          items: (!prev.items || prev.items.length === 0) && match.items && match.items.length > 0 ? match.items : prev.items,
         };
       }
       return { ...prev, partyName: val };
@@ -2137,16 +2161,33 @@ export default function App() {
   const handleSurveyMobileChange = (val: string) => {
     setSurveyForm(prev => {
       const cleanDigits = val.replace(/\D/g, '');
-      if (cleanDigits.length >= 10) {
+      if (cleanDigits.length >= 8 || val.trim().length >= 8) {
         const match = findCustomerProfile(val);
-        if (match && match.partyName) {
-          setShareToast(`Party Name auto-completed: ${match.partyName}`);
+        if (match) {
+          setShareToast(`✓ Auto-filled survey details for ${match.partyName || val}`);
           setTimeout(() => setShareToast(null), 3000);
           return {
             ...prev,
             mobileNo: val,
-            partyName: prev.partyName ? prev.partyName : match.partyName,
-            email: prev.email ? prev.email : (match.email || ''),
+            partyName: match.partyName || prev.partyName,
+            email: match.email || prev.email,
+            fromCountry: match.fromCountry || prev.fromCountry,
+            fromState: match.fromState || prev.fromState,
+            fromCity: match.fromCity || prev.fromCity,
+            fromArea: match.fromArea || prev.fromArea,
+            fromPinCode: match.fromPinCode || match.fromPincode || prev.fromPinCode,
+            fromFloor: match.fromFloor || prev.fromFloor,
+            fromLift: match.fromLift || prev.fromLift,
+            toCountry: match.toCountry || prev.toCountry,
+            toState: match.toState || prev.toState,
+            toCity: match.toCity || prev.toCity,
+            toArea: match.toArea || prev.toArea,
+            toPinCode: match.toPinCode || match.toPincode || prev.toPinCode,
+            toFloor: match.toFloor || prev.toFloor,
+            toLift: match.toLift || prev.toLift,
+            packingDate: match.packingDate || prev.packingDate,
+            dateOfDelivery: match.deliveryDate || prev.dateOfDelivery,
+            items: (!prev.items || prev.items.length === 0) && match.items && match.items.length > 0 ? match.items : prev.items,
           };
         }
       }
@@ -2192,10 +2233,10 @@ export default function App() {
   const handleQuotationMobileChange = (val: string) => {
     setQuotationForm(prev => {
       const cleanDigits = val.replace(/\D/g, '');
-      if (cleanDigits.length >= 10) {
+      if (cleanDigits.length >= 8 || val.trim().length >= 8) {
         const match = findCustomerProfile(val);
         if (match) {
-          setShareToast(`✓“ Auto-filled party & route for ${match.partyName}`);
+          setShareToast(`✓ Auto-filled party & route for ${match.partyName || val}`);
           setTimeout(() => setShareToast(null), 3000);
           return {
             ...prev,
@@ -2270,7 +2311,7 @@ export default function App() {
   const handlePackingListMobileChange = (val: string) => {
     setPackingListForm(prev => {
       const cleanDigits = val.replace(/\D/g, '');
-      if (cleanDigits.length >= 10) {
+      if (cleanDigits.length >= 8 || val.trim().length >= 8) {
         const match = findCustomerProfile(val);
         if (match) {
           const itemsToSet = (!prev.items || prev.items.length === 0) && match.items?.length
@@ -2283,7 +2324,7 @@ export default function App() {
                 remark: item.remark || 'Standard Packing',
               }))
             : prev.items;
-          setShareToast(`✓“ Auto-filled name & route for ${match.partyName}`);
+          setShareToast(`✓ Auto-filled name & route for ${match.partyName || val}`);
           setTimeout(() => setShareToast(null), 3000);
           return {
             ...prev,
