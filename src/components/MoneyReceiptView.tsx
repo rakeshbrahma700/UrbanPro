@@ -642,24 +642,15 @@ export const MoneyReceiptView: React.FC<Props> = ({
               </div>
 
               {/* Center Title & Details */}
-              <div className="w-[72%] p-2 text-center flex flex-col justify-center items-center bg-white">
+              <div className="w-[72%] p-3 text-center flex flex-col justify-center items-center bg-white">
                 <div style={{ fontFamily: "'Times New Roman', Times, serif" }}>
-                  <h1 className="text-[24px] sm:text-[28px] font-black tracking-tight leading-none">
+                  <h1 className="text-[32px] sm:text-[36px] font-black tracking-tight leading-none">
                     <span style={{ color: '#1e3a8a' }}>Urban</span><span style={{ color: '#ff0800' }}>Pro</span>
                   </h1>
-                  <h2 className="text-[13px] sm:text-[15px] font-extrabold tracking-wider uppercase mt-0.5" style={{ color: '#1e3a8a' }}>
+                  <h2 className="text-[15px] sm:text-[17px] font-extrabold tracking-widest uppercase mt-1" style={{ color: '#1e3a8a' }}>
                     Packer & Logistics
                   </h2>
                 </div>
-                <p className="text-[9.5px] sm:text-[10px] leading-tight text-slate-900 font-semibold mt-0.5">
-                  <strong>Regd. Office:</strong> {companyProfile?.regAddress || companyProfile?.addressLine1 || 'Ward No. 3, Near Old SBI ATM, Dipka, Korba, CG – 495452'}
-                </p>
-                <p className="text-[9.5px] sm:text-[10px] leading-tight text-slate-900 font-semibold mt-0.5">
-                  <strong>Main Operational Office:</strong> {companyProfile?.branchAddress || companyProfile?.addressLine2 || 'Plot No 1491, Balintha Canal Road, Near Lenskart, Hanspal, Bhubaneswar, Odisha – 752101'}
-                </p>
-                <p className="text-[12px] sm:text-[12px] leading-tight text-slate-800 font-semibold mt-0.5">
-                  <strong>Email:</strong> {companyProfile?.email || 'urbanpro403@gmail.com'}
-                </p>
               </div>
             </div>
 
@@ -772,8 +763,20 @@ export const MoneyReceiptView: React.FC<Props> = ({
                 </div>
               </div>
 
+              {/* Office Address & Contact Details Footer */}
+              <div className="mt-4 pt-2 border-t border-slate-300 text-center text-[9px] sm:text-[9.5px] leading-tight text-black font-semibold">
+                <p>
+                  <strong>Regd. Office:</strong> {companyProfile?.regAddress || companyProfile?.addressLine1 || 'Ward No. 3, Near Old SBI ATM, Dipka, Korba, CG – 495452'}
+                  &nbsp;|&nbsp;
+                  <strong>Main Operational Office:</strong> {companyProfile?.branchAddress || companyProfile?.addressLine2 || 'Plot No. 1491, Hanspal, Balianta Canal Road, Near Lenskart, Bhubaneswar, Odisha – 752101'}
+                </p>
+                <p className="mt-0.5">
+                  <strong>Helpline:</strong> 8093017400 &nbsp;|&nbsp; <strong>Email:</strong> {companyProfile?.email || 'urbanpro403@gmail.com'} &nbsp;|&nbsp; <strong>Website:</strong> www.urbanprologistics.com
+                </p>
+              </div>
+
               {/* Bottom 24x7 Customer Care Support Bar */}
-              <div className="mt-5 pt-2 border-t border-slate-300 text-center text-[10.5px] font-bold text-slate-800">
+              <div className="mt-2 pt-2 border-t border-slate-300 text-center text-[10.5px] font-bold text-slate-800">
                 24x7 Customer Care Support <span className="text-[#1e3a8a] font-black">8093017400</span>
               </div>
             </div>
