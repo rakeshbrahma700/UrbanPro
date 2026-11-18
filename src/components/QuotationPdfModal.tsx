@@ -1292,6 +1292,9 @@ export const QuotationPdfModal: React.FC<QuotationPdfModalProps> = ({
                     <div className="w-12 text-center text-slate-500 border-r border-blue-100">i</div>
                     <div className="flex-1 text-left px-2 font-medium text-black border-r border-blue-100">
                       Goods Value Declared (Insurance Basis Only)
+                      {parseChargeNumber(quotation.goodsValue) > 0 && (
+                        <span className="text-[10px] text-slate-500 ml-1.5 font-normal">(on declared goods value of ₹ {parseChargeNumber(quotation.goodsValue).toLocaleString()})</span>
+                      )}
                     </div>
                     <div className="w-36 text-center border-r border-blue-100 text-[10px] font-semibold text-slate-600">
                       Not charged
@@ -1306,9 +1309,6 @@ export const QuotationPdfModal: React.FC<QuotationPdfModalProps> = ({
                     <div className="w-12 text-center text-slate-500 border-r border-blue-100">+</div>
                     <div className="flex-1 text-left px-2 font-medium text-black border-r border-blue-100">
                       Insurance Charges ({totals.insPercent})
-                      {parseChargeNumber(quotation.goodsValue) > 0 && (
-                        <span className="text-[10px] text-slate-500 ml-1.5 font-normal">(on declared goods value of ₹ {parseChargeNumber(quotation.goodsValue).toLocaleString()})</span>
-                      )}
                     </div>
                     <div className="w-36 text-center border-r border-blue-100 text-[10px] font-semibold text-slate-600">
                       {totals.insStatus === 'Exempted' ? 'Excluded' : `@ ${totals.insPercent} on Goods`}
