@@ -771,6 +771,12 @@ export default function App() {
   });
 
   const [quotationForm, setQuotationForm] = useState(() => getFreshQuotationForm());
+  const [editingQuotationId, setEditingQuotationId] = useState<string | number | null>(null);
+  const [viewingQuotation, setViewingQuotation] = useState<any | null>(null);
+  const [quotationToDelete, setQuotationToDelete] = useState<any | null>(null);
+  const [quotationSearchQuery, setQuotationSearchQuery] = useState('');
+  const [surveySearchQuery, setSurveySearchQuery] = useState('');
+  const [shareToast, setShareToast] = useState<string | null>(null);
 
   // Automatically keep Quotation No. (max + 1) and Quotation Date (today) up to date when creating a quotation
   useEffect(() => {
@@ -794,13 +800,6 @@ export default function App() {
       console.error(e);
     }
   }, [quotations]);
-
-  const [editingQuotationId, setEditingQuotationId] = useState<string | number | null>(null);
-  const [viewingQuotation, setViewingQuotation] = useState<any | null>(null);
-  const [quotationToDelete, setQuotationToDelete] = useState<any | null>(null);
-  const [quotationSearchQuery, setQuotationSearchQuery] = useState('');
-  const [surveySearchQuery, setSurveySearchQuery] = useState('');
-  const [shareToast, setShareToast] = useState<string | null>(null);
 
   const handleSaveQuotation = () => {
     if (!quotationForm.partyName.trim()) {
