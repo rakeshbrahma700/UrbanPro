@@ -2191,9 +2191,12 @@ ${companyProfile?.accountNo ? `🏛 *Bank Account:* ${companyProfile.bankName ||
                     <tr>
                       <td colSpan={2} className="p-1 border-r border-[#1e3a8a]">
                         Declared Goods Value (Insurance Basis Only)
+                        {Number(selectedRecord.goodsValue || 0) > 0 && (
+                          <span className="text-[9px] text-slate-500 ml-1.5 font-normal">(on declared goods value of ₹ {Number(selectedRecord.goodsValue).toLocaleString()})</span>
+                        )}
                       </td>
-                      <td className="p-1 text-right font-mono">
-                        ₹ {Number(selectedRecord.goodsValue || 0).toLocaleString()}
+                      <td className="p-1 text-right font-mono text-slate-600">
+                        —
                       </td>
                     </tr>
                     <tr>

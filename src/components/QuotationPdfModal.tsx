@@ -1297,10 +1297,10 @@ export const QuotationPdfModal: React.FC<QuotationPdfModalProps> = ({
                       )}
                     </div>
                     <div className="w-36 text-center border-r border-blue-100 text-[10px] font-semibold text-slate-600">
-                      Not charged
+                      —
                     </div>
-                    <div className="w-36 text-right pr-2 font-semibold text-amber-800">
-                      {totals.goodsVal > 0 ? `₹ ${totals.goodsVal.toLocaleString()}` : 'Nil'}
+                    <div className="w-36 text-right pr-2 font-semibold text-slate-600">
+                      —
                     </div>
                   </div>
 
