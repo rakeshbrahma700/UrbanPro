@@ -2313,11 +2313,23 @@ export default function App() {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    let val = e.target.value;
+    if (e.target.name === 'phone') {
+      val = val.replace(/\D/g, '').slice(0, 10);
+    }
+    setFormData({ ...formData, [e.target.name]: val });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const cleanPhone = (formData.phone || '').replace(/\D/g, '');
+    if (cleanPhone.length !== 10) {
+      setQuoteSubmissionError('Please enter a valid 10-digit mobile number.');
+      setShareToast('⚠️ Please enter a valid 10-digit mobile number');
+      setTimeout(() => setShareToast(null), 3500);
+      return;
+    }
 
     // Prepare the enquiry for the admin's WhatsApp.
     const finalItem = formData.item === 'Other' ? (formData.otherItem || 'Custom requirement') : formData.item;
@@ -5080,20 +5092,18 @@ export default function App() {
                         const formTotals = calculateQuotationTotals(quotationForm);
                         return (
                           <div className="mt-5 pt-4 border-t-2 border-cyan-300">
-                            <div className="rounded-lg p-3 bg-cyan-50 focus-within:bg-cyan-100 group">
-                              <label className="block text-xs font-bold text-slate-900 uppercase tracking-wider mb-1 flex items-center justify-between">
-                                <span>SUB TOTAL</span>
-                              </label>
-                              <div className="flex items-center justify-between">
-                                <input
-                                  type="text"
-                                  placeholder={String(formTotals.subTotal || '0')}
-                                  value={String(formTotals.subTotal)}
-                                  readOnly
-                                  className="w-full outline-none text-slate-800 text-sm font-bold bg-transparent"
-                                />
-                                <span className="text-[11px] text-slate-400 font-medium ml-1 shrink-0">₹ INR</span>
-                              </div>
+                            <div className="rounded-lg p-3 bg-cyan-50 focus-within:bg-cyan-100 group flex items-center justify-end gap-2.5">
+                              <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                                SUB TOTAL
+                              </span>
+                              <input
+                                type="text"
+                                placeholder={String(formTotals.subTotal || '0')}
+                                value={String(formTotals.subTotal)}
+                                readOnly
+                                className="w-auto max-w-[140px] text-right outline-none text-slate-900 text-base font-black bg-transparent"
+                              />
+                              <span className="text-[11px] text-slate-500 font-bold shrink-0">₹ INR</span>
                             </div>
                           </div>
                         );
@@ -5246,10 +5256,6 @@ export default function App() {
                         return (
                           <div className="mt-4 p-3.5 bg-gradient-to-r from-blue-50 via-indigo-50 to-sky-50 border border-blue-200 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-xs">
                             <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs font-semibold text-slate-700">
-                              <div>
-                                <span className="text-slate-500">Base Charges:</span>{' '}
-                                <strong className="text-slate-900 font-mono">₹ {formTotals.baseTotal.toLocaleString()}</strong>
-                              </div>
                               {formTotals.insuranceNum > 0 && (
                                 <div className="text-emerald-700">
                                   <span>+ Ins ({formTotals.insPercent} Extra):</span>{' '}
@@ -7021,11 +7027,19 @@ export default function App() {
                       type="tel"
                       name="phone"
                       required
+                      inputMode="numeric"
+                      pattern="[0-9]{10}"
+                      maxLength={10}
+                      minLength={10}
                       value={formData.phone}
                       onChange={handleInputChange}
                       className="w-full px-3.5 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-900 focus:border-blue-900 outline-none transition-all text-sm"
-                      placeholder="Enter mobile number"
+                      placeholder="Enter 10-digit mobile number"
+                      title="Please enter a valid 10-digit mobile number"
                     />
+                    {formData.phone && formData.phone.length < 10 && (
+                      <p className="text-[11px] text-amber-600 font-medium mt-1">Must be 10 digits ({10 - formData.phone.length} more needed)</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Email</label>
@@ -7855,11 +7869,19 @@ export default function App() {
                     type="tel"
                     name="phone"
                     required
+                    inputMode="numeric"
+                    pattern="[0-9]{10}"
+                    maxLength={10}
+                    minLength={10}
                     value={formData.phone}
                     onChange={handleInputChange}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-900 focus:border-blue-900 outline-none transition-all text-sm bg-white"
                     placeholder="Enter 10-digit mobile number"
+                    title="Please enter a valid 10-digit mobile number"
                   />
+                  {formData.phone && formData.phone.length < 10 && (
+                    <p className="text-[11px] text-amber-600 font-medium mt-1">Must be 10 digits ({10 - formData.phone.length} more needed)</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Email</label>
