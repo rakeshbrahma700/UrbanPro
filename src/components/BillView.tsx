@@ -206,13 +206,22 @@ export const BillView: React.FC<Props> = ({
     const rec = billRecord || selectedRecord;
     if (!rec) return;
 
+    // Ensure preview is rendered for this exact record
+    setSelectedRecord(rec);
+    setViewMode('preview');
+
     try {
       setIsDownloading(true);
       setDownloadSuccess(false);
 
-      const printableElement = document.getElementById('printable-bill-invoice-pdf');
+      // Wait a moment for React to mount the printable document preview in the DOM if needed
+      let printableElement = document.getElementById('printable-bill-invoice-pdf');
       if (!printableElement) {
-        window.print();
+        await new Promise(resolve => setTimeout(resolve, 200));
+        printableElement = document.getElementById('printable-bill-invoice-pdf');
+      }
+
+      if (!printableElement) {
         return;
       }
 
@@ -225,7 +234,6 @@ export const BillView: React.FC<Props> = ({
       }
     } catch (err) {
       console.error('Error downloading Bill PDF:', err);
-      window.print();
     } finally {
       setIsDownloading(false);
     }
@@ -653,27 +661,6 @@ ${companyProfile?.accountNo ? `🏛 *Bank Account:* ${companyProfile.bankName ||
         </div>
       )}
 
-      {/* Auto-fill Helper Banner */}
-      {viewMode === 'form' && customerProfiles.length > 0 && (
-        <div className="bg-gradient-to-r from-sky-50 to-indigo-50 border border-sky-200 rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-2xs">
-          <div className="flex items-center gap-2 text-xs text-sky-900 font-semibold">
-            <Sparkles className="w-4 h-4 text-sky-600 shrink-0" />
-            <span>Quick Auto-fill Customer Details:</span>
-          </div>
-          <div className="flex flex-wrap gap-1.5 max-h-16 overflow-y-auto">
-            {customerProfiles.slice(0, 5).map((cp, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => applyCustomerAutoFill(cp)}
-                className="bg-white hover:bg-sky-600 hover:text-white text-slate-700 border border-sky-300 rounded-full px-3 py-0.5 text-xs font-semibold transition-all cursor-pointer shadow-2xs"
-              >
-                {cp.partyName}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
       {viewMode === 'form' && customerProfiles.length > 0 && (
         <RecordLookup profiles={customerProfiles} onSelect={applyCustomerAutoFill} />
       )}

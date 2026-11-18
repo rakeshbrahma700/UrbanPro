@@ -63,13 +63,22 @@ export const PaymentVoucherView: React.FC<Props> = ({ vouchers, initialViewMode 
     const rec = voucherRecord || selectedRecord;
     if (!rec) return;
 
+    // Ensure preview is rendered for this exact record
+    setSelectedRecord(rec);
+    setViewMode('preview');
+
     try {
       setIsDownloading(true);
       setDownloadSuccess(false);
 
-      const printableElement = document.getElementById('printable-payment-voucher-pdf');
+      // Wait a moment for React to mount the printable document preview in the DOM if needed
+      let printableElement = document.getElementById('printable-payment-voucher-pdf');
       if (!printableElement) {
-        window.print();
+        await new Promise(resolve => setTimeout(resolve, 200));
+        printableElement = document.getElementById('printable-payment-voucher-pdf');
+      }
+
+      if (!printableElement) {
         return;
       }
 
@@ -82,7 +91,6 @@ export const PaymentVoucherView: React.FC<Props> = ({ vouchers, initialViewMode 
       }
     } catch (err) {
       console.error('Error downloading Voucher PDF:', err);
-      window.print();
     } finally {
       setIsDownloading(false);
     }

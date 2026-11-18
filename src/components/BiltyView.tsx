@@ -117,13 +117,22 @@ export const BiltyView: React.FC<Props> = ({
     const rec = biltyRecord || selectedRecord;
     if (!rec) return;
 
+    // Ensure the document preview is rendered for this exact record
+    setSelectedRecord(rec);
+    setViewMode('preview');
+
     try {
       setIsDownloading(true);
       setDownloadSuccess(false);
 
-      const printableElement = document.getElementById('printable-bilty-pdf');
+      // Wait a moment for React to mount the printable document preview in the DOM if needed
+      let printableElement = document.getElementById('printable-bilty-pdf');
       if (!printableElement) {
-        window.print();
+        await new Promise(resolve => setTimeout(resolve, 200));
+        printableElement = document.getElementById('printable-bilty-pdf');
+      }
+
+      if (!printableElement) {
         return;
       }
 
@@ -136,7 +145,6 @@ export const BiltyView: React.FC<Props> = ({
       }
     } catch (err) {
       console.error('Error downloading Bilty PDF:', err);
-      window.print();
     } finally {
       setIsDownloading(false);
     }
@@ -351,18 +359,6 @@ export const BiltyView: React.FC<Props> = ({
                     </option>
                   ))}
                 </select>
-                <div className="flex flex-wrap gap-1.5">
-                {customerProfiles.slice(0, 4).map((cp, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => handleAutoFillCustomer(cp)}
-                    className="px-2.5 py-1 bg-white hover:bg-sky-50 text-sky-900 border border-sky-300 rounded-lg text-xs font-semibold cursor-pointer shadow-2xs"
-                  >
-                    Auto-fill: {cp.partyName}
-                  </button>
-                ))}
-                </div>
               </div>
             )}
           </div>

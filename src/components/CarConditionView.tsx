@@ -117,13 +117,22 @@ export const CarConditionView: React.FC<Props> = ({ carConditions, onSave, onDel
     const rec = carRecord || selectedRecord;
     if (!rec) return;
 
+    // Ensure preview is rendered for this exact record
+    setSelectedRecord(rec);
+    setViewMode('preview');
+
     try {
       setIsDownloading(true);
       setDownloadSuccess(false);
 
-      const printableElement = document.getElementById('printable-car-condition-pdf');
+      // Wait a moment for React to mount the printable document preview in the DOM if needed
+      let printableElement = document.getElementById('printable-car-condition-pdf');
       if (!printableElement) {
-        window.print();
+        await new Promise(resolve => setTimeout(resolve, 200));
+        printableElement = document.getElementById('printable-car-condition-pdf');
+      }
+
+      if (!printableElement) {
         return;
       }
 
@@ -136,7 +145,6 @@ export const CarConditionView: React.FC<Props> = ({ carConditions, onSave, onDel
       }
     } catch (err) {
       console.error('Error downloading Car Condition PDF:', err);
-      window.print();
     } finally {
       setIsDownloading(false);
     }
@@ -334,18 +342,6 @@ export const CarConditionView: React.FC<Props> = ({ carConditions, onSave, onDel
                     </option>
                   ))}
                 </select>
-                <div className="flex flex-wrap gap-1.5">
-                {customerProfiles.slice(0, 3).map((cp, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => handleAutoFillCustomer(cp)}
-                    className="px-2.5 py-1 bg-white hover:bg-sky-600 hover:text-white border border-sky-300 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer"
-                  >
-                    {cp.partyName}
-                  </button>
-                ))}
-                </div>
               </div>
             )}
           </div>

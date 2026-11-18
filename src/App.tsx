@@ -3971,25 +3971,6 @@ export default function App() {
                           />
                         </div>
                       </div>
-
-                      {/* Quick-Pick Existing Clients Carousel */}
-                      {customerProfiles.length > 0 && (
-                        <div className="mt-4 pt-3 border-t border-slate-100">
-                          <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
-                            {customerProfiles.slice(0, 8).map((cp, idx) => (
-                              <button
-                                key={`chip-${idx}`}
-                                type="button"
-                                onClick={() => handleSurveyPartyNameChange(cp.partyName)}
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-300 border border-slate-200 text-slate-700 text-xs rounded-lg transition-colors cursor-pointer font-medium"
-                              >
-                                <span>{cp.partyName}</span>
-                                {cp.mobileNo && <span className="text-[10px] text-slate-500 font-mono">({cp.mobileNo})</span>}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </div>
 
                     {/* Relocate From Section */}
@@ -4668,25 +4649,6 @@ export default function App() {
                           />
                         </div>
                       </div>
-
-                      {/* Quick-Pick Existing Clients Carousel for Quotation */}
-                      {customerProfiles.length > 0 && (
-                        <div className="mt-4 pt-3 border-t border-slate-100">
-                          <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
-                            {customerProfiles.slice(0, 8).map((cp, idx) => (
-                              <button
-                                key={`chip-q-${idx}`}
-                                type="button"
-                                onClick={() => handleQuotationPartyNameChange(cp.partyName)}
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-300 border border-slate-200 text-slate-700 text-xs rounded-lg transition-colors cursor-pointer font-medium"
-                              >
-                                <span>{cp.partyName}</span>
-                                {cp.mobileNo && <span className="text-[10px] text-slate-500 font-mono">({cp.mobileNo})</span>}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </div>
 
                     {/* Packing Details Section */}
@@ -5887,25 +5849,6 @@ export default function App() {
                           />
                         </div>
                       </div>
-
-                      {/* Quick-Pick Existing Clients Carousel for Packing List */}
-                      {customerProfiles.length > 0 && (
-                        <div className="mt-4 pt-3 border-t border-slate-100">
-                          <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
-                            {customerProfiles.slice(0, 8).map((cp, idx) => (
-                              <button
-                                key={`chip-pl-${idx}`}
-                                type="button"
-                                onClick={() => handlePackingListPartyNameChange(cp.partyName)}
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-300 border border-slate-200 text-slate-700 text-xs rounded-lg transition-colors cursor-pointer font-medium"
-                              >
-                                <span>{cp.partyName}</span>
-                                {cp.mobileNo && <span className="text-[10px] text-slate-500 font-mono">({cp.mobileNo})</span>}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </div>
 
                     {/* Section 2: Relocate From (Slate/Grey) */}

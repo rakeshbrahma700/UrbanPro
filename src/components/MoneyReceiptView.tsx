@@ -105,13 +105,22 @@ export const MoneyReceiptView: React.FC<Props> = ({
     const rec = recData || selectedRecord;
     if (!rec) return;
 
+    // Ensure preview is rendered for this exact record
+    setSelectedRecord(rec);
+    setViewMode('preview');
+
     try {
       setIsDownloading(true);
       setDownloadSuccess(false);
 
-      const printableElement = document.getElementById('printable-money-receipt-pdf');
+      // Wait a moment for React to mount the printable document preview in the DOM if needed
+      let printableElement = document.getElementById('printable-money-receipt-pdf');
       if (!printableElement) {
-        window.print();
+        await new Promise(resolve => setTimeout(resolve, 200));
+        printableElement = document.getElementById('printable-money-receipt-pdf');
+      }
+
+      if (!printableElement) {
         return;
       }
 
@@ -124,7 +133,6 @@ export const MoneyReceiptView: React.FC<Props> = ({
       }
     } catch (err) {
       console.error('Error downloading Receipt PDF:', err);
-      window.print();
     } finally {
       setIsDownloading(false);
     }

@@ -125,13 +125,22 @@ export const BikeConditionView: React.FC<Props> = ({
     const rec = bikeRecord || selectedRecord;
     if (!rec) return;
 
+    // Ensure preview is rendered for this exact record
+    setSelectedRecord(rec);
+    setViewMode('preview');
+
     try {
       setIsDownloading(true);
       setDownloadSuccess(false);
 
-      const printableElement = document.getElementById('printable-bike-condition-pdf');
+      // Wait a moment for React to mount the printable document preview in the DOM if needed
+      let printableElement = document.getElementById('printable-bike-condition-pdf');
       if (!printableElement) {
-        window.print();
+        await new Promise(resolve => setTimeout(resolve, 200));
+        printableElement = document.getElementById('printable-bike-condition-pdf');
+      }
+
+      if (!printableElement) {
         return;
       }
 
@@ -144,7 +153,6 @@ export const BikeConditionView: React.FC<Props> = ({
       }
     } catch (err) {
       console.error('Error downloading Bike Condition PDF:', err);
-      window.print();
     } finally {
       setIsDownloading(false);
     }
@@ -337,18 +345,6 @@ export const BikeConditionView: React.FC<Props> = ({
                     </option>
                   ))}
                 </select>
-                <div className="flex flex-wrap gap-1.5">
-                {customerProfiles.slice(0, 3).map((cp, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => handleAutoFillCustomer(cp)}
-                    className="px-2.5 py-1 bg-white hover:bg-sky-600 hover:text-white border border-sky-300 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer"
-                  >
-                    {cp.partyName}
-                  </button>
-                ))}
-                </div>
               </div>
             )}
           </div>
